@@ -3,17 +3,16 @@ import axios from "axios";
 import { signIn } from "next-auth/react";
 import Input from "@/components/Input";
 import { useRouter } from "next/router";
-import { FcGoogle } from "react-icons/fc";
-import { BsGithub } from "react-icons/bs";
 
 const Auth = () => {
-  const router = useRouter();
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [name, setName] = useState("");
+  const [email, setEmail] = useState<string>("");
+  const [password, setPassword] = useState<string>("");
+  const [name, setName] = useState<string>("");
+  const [error, setError] = useState<boolean>(false);
 
-  const [variant, setVariant] = useState("signin");
-  const isSignIn = variant === "signin";
+  const [variant, setVariant] = useState<string>("signin");
+  const router = useRouter();
+  const isSignIn: boolean = variant === "signin";
 
   const onChangeVariant = useCallback(() => {
     setVariant((currentVariant) =>
@@ -22,14 +21,18 @@ const Auth = () => {
   }, []);
 
   const login = useCallback(async () => {
-    await signIn("credentials", {
+    const res = await signIn("credentials", {
       email,
       password,
+      callbackUrl: `/profiles`,
       redirect: false,
-      callbackUrl: `${window.location.origin}/`,
     });
-    router.push("/");
-  }, [email, password, router]);
+    if (res!.ok) {
+      router.push("/profiles");
+    } else {
+      setError(true);
+    }
+  }, [email, password, setError, router]);
 
   const register = useCallback(async () => {
     try {
@@ -45,7 +48,7 @@ const Auth = () => {
   }, [email, name, password, login]);
 
   return (
-    <div className="relative h-full w-full bg-[url('/images/hero.jpeg')] bg-no-repeat bg-center bg-fixed bg-cover">
+    <div className="relative h-full w-full bg-[url('/images/background.jpeg')] bg-no-repeat bg-center bg-fixed bg-cover">
       <div className="bg-black w-full h-full lg:bg-opacity-50">
         <div className="px-12 py-5">
           <img src="/images/logo.png" alt="logo" className="h-12" />
@@ -56,6 +59,14 @@ const Auth = () => {
               {variant === "signin" ? "Sign in" : "Register"}
             </h2>
             <div className="flex flex-col gap-4">
+              {error && (
+                <div className="bg-[#e87c03] rounded-md p-2 text-white text-center">
+                  <span className="font-semibold">
+                    Credentials don&apos;t match.
+                  </span>{" "}
+                  please try again or try reseting your password.
+                </div>
+              )}
               {!isSignIn && (
                 <Input
                   id="name"
@@ -91,12 +102,12 @@ const Auth = () => {
               >
                 {isSignIn ? "Sign in" : "Register"}
               </button>
-              <div className="flex items-center justify-center gap-4 mt-">
+              {/* <div className="flex items-center justify-center gap-4 mt-">
                 <div
                   className="flex items-center justify-center bg-white w-12 h-12 rounded-full hover:opacity-80 transition"
                   onClick={() =>
                     signIn("google", {
-                      callbackUrl: `/`,
+                      callbackUrl: `/profiles`,
                     })
                   }
                 >
@@ -104,11 +115,11 @@ const Auth = () => {
                 </div>
                 <div
                   className="flex items-center justify-center bg-white w-12 h-12 rounded-full hover:opacity-80 transition"
-                  onClick={() => signIn("github", { callbackUrl: "/" })}
+                  onClick={() => signIn("github", { callbackUrl: "/profiles" })}
                 >
                   <BsGithub size={35} />
                 </div>
-              </div>
+              </div> */}
               <p className="text-neutral-500 mt-8">
                 {isSignIn
                   ? "First time using netflix?"
