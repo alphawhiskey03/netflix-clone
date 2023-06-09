@@ -1,7 +1,7 @@
 import { useCallback, useState, useEffect, FC } from "react";
 import MobileMenu from "./MobileMenu";
 import NavbarItem from "./NavbarItem";
-import { BsChevronDown, BsSearch, BsBell } from "react-icons/bs";
+import { BsChevronDown, BsBell } from "react-icons/bs";
 import AccountMenu from "@/components/AccountMenu";
 import Search from "./Search";
 
@@ -85,7 +85,9 @@ const Navbar: FC<NavBarProps> = ({
         </div>
         <div
           onClick={togglMobileMenu}
-          className="lg:hidden flex flex-row items-center gap-2 ml-8 cursor-pointer relative"
+          className={`lg:hidden flex flex-row items-center gap-2 ml-8 cursor-pointer relative ${
+            srcOpen ? "hidden" : ""
+          }`}
         >
           <p className="text-white text-sm">Browse</p>
           <BsChevronDown
@@ -95,7 +97,7 @@ const Navbar: FC<NavBarProps> = ({
           />
           <MobileMenu visible={showMobileMenu} />
         </div>
-        <div className="flex flex-row ml-auto gap-7 items-center">
+        <div className="flex flex-row ml-auto gap-4 lg:gap-7 items-center justify-center">
           <Search
             isOpen={srcOpen}
             onSrcChange={handleSrcChange}
