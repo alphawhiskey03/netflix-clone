@@ -3,12 +3,16 @@ import axios from "axios";
 import { signIn } from "next-auth/react";
 import Input from "@/components/Input";
 import { useRouter } from "next/router";
+// import { FcGoogle } from "react-icons/fc";
+// import { BsGithub } from "react-icons/bs";
+import Spinner from "@/components/Spinner";
 
 const Auth = () => {
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
   const [name, setName] = useState<string>("");
   const [error, setError] = useState<boolean>(false);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
 
   const [variant, setVariant] = useState<string>("signin");
   const router = useRouter();
@@ -21,6 +25,7 @@ const Auth = () => {
   }, []);
 
   const login = useCallback(async () => {
+    setIsLoading(true);
     const res = await signIn("credentials", {
       email,
       password,
@@ -32,9 +37,11 @@ const Auth = () => {
     } else {
       setError(true);
     }
+    setIsLoading(false);
   }, [email, password, setError, router]);
 
   const register = useCallback(async () => {
+    setIsLoading(true);
     try {
       await axios.post("/api/register", {
         email,
@@ -45,6 +52,7 @@ const Auth = () => {
     } catch (err) {
       console.log(err);
     }
+    setIsLoading(false);
   }, [email, name, password, login]);
 
   return (
@@ -98,9 +106,14 @@ const Auth = () => {
               />
               <button
                 onClick={isSignIn ? login : register}
-                className="bg-red-600 text-white w-full rounded-sm px-6 py-3 mt-3 hover:bg-red-700 transition"
+                disabled={isLoading}
+                className="flex flex-row items-center justify-center bg-red-600 text-white w-full rounded-sm px-6 py-3 mt-3 hover:bg-red-700 transition"
               >
-                {isSignIn ? "Sign in" : "Register"}
+                {isLoading ? (
+                  <Spinner size={25} />
+                ) : (
+                  <>{isSignIn ? "Sign in" : "Register"}</>
+                )}
               </button>
               {/* <div className="flex items-center justify-center gap-4 mt-">
                 <div
