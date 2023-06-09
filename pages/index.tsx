@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useCallback, useState } from "react";
 import { NextPageContext } from "next";
 import { getSession } from "next-auth/react";
 import Navbar from "@/components/Navbar";
@@ -33,13 +33,13 @@ export default function Home() {
   const handleSrcOpen = () => {
     setSrcOpen(true);
   };
-  const handleSrcChange = (text: string): void => {
+  const handleSrcChange = useCallback((text: string): void => {
     setSrc(text);
-  };
-  const resetSrc = () => {
+  }, []);
+  const resetSrc = useCallback(() => {
     setSrc("");
     setSrcOpen(false);
-  };
+  }, []);
 
   return (
     <ModalProvider>
