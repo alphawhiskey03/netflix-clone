@@ -1,4 +1,4 @@
-import React, { FC, useRef, useState, useEffect } from "react";
+import React, { FC, useEffect, useRef } from "react";
 import { AiOutlineClose } from "react-icons/ai";
 import { BsSearch } from "react-icons/bs";
 interface SearchProps {
@@ -13,15 +13,25 @@ const Search: FC<SearchProps> = ({
   onToggleSrc,
   onResetSrc,
 }) => {
+  const inputRef = useRef<HTMLInputElement>(null);
+  useEffect(() => {
+    if (inputRef.current) {
+      inputRef.current.focus();
+    }
+  }, [isOpen]);
+
   if (isOpen) {
     return (
       <div className="flex flex-row border border-white items-center gap-2 bg-black p-2">
         <BsSearch className="text-white" />
         <input
+          ref={inputRef}
           className="
         bg-black
         outline-none
         text-white
+        w-[100px]
+        lg:w-auto
       "
           placeholder="Title"
           onChange={(e) => onSrcChange(e.target.value)}
