@@ -3,8 +3,8 @@ import axios from "axios";
 import { signIn } from "next-auth/react";
 import Input from "@/components/Input";
 import { useRouter } from "next/router";
-// import { FcGoogle } from "react-icons/fc";
-// import { BsGithub } from "react-icons/bs";
+import { FcGoogle } from "react-icons/fc";
+import { BsGithub } from "react-icons/bs";
 import Spinner from "@/components/Spinner";
 
 const Auth = () => {
@@ -115,9 +115,9 @@ const Auth = () => {
                   <>{isSignIn ? "Sign in" : "Register"}</>
                 )}
               </button>
-              {/* <div className="flex items-center justify-center gap-4 mt-">
+              <div className="flex items-center justify-center gap-4 mt-">
                 <div
-                  className="flex items-center justify-center bg-white w-12 h-12 rounded-full hover:opacity-80 transition"
+                  className="flex items-center justify-center cursor-pointer bg-white w-12 h-12 rounded-full hover:opacity-80 transition"
                   onClick={() =>
                     signIn("google", {
                       callbackUrl: `/profiles`,
@@ -127,12 +127,12 @@ const Auth = () => {
                   <FcGoogle size={35} />
                 </div>
                 <div
-                  className="flex items-center justify-center bg-white w-12 h-12 rounded-full hover:opacity-80 transition"
+                  className="flex items-center justify-center cursor-pointer bg-white w-12 h-12 rounded-full hover:opacity-80 transition"
                   onClick={() => signIn("github", { callbackUrl: "/profiles" })}
                 >
                   <BsGithub size={35} />
                 </div>
-              </div> */}
+              </div>
               <p className="text-neutral-500 mt-8">
                 {isSignIn
                   ? "First time using netflix?"
